@@ -1,8 +1,11 @@
 use std::fs::File;
 use std::io::{self, BufRead};
+use std::path::PathBuf;
 
 pub fn run() -> io::Result<()> {
-    let path = "input1.txt";
+    let mut path = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+    path.push("input/input1.txt"); // Adjust the path to the input file
+
     let file = File::open(path)?;
     let reader = io::BufReader::new(file);
 
