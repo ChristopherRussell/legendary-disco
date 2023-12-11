@@ -4,7 +4,8 @@ mod day3;
 mod day4;
 mod day5;
 mod util;
-use std::io;
+
+use anyhow::anyhow;
 
 fn main() {
     let args: Vec<String> = std::env::args().collect();
@@ -30,7 +31,7 @@ fn main() {
     }
 }
 
-fn run_day(day_number: usize) -> io::Result<()> {
+fn run_day(day_number: usize) -> anyhow::Result<i32> {
     match day_number {
         1 => day1::run(),
         2 => {
@@ -42,6 +43,6 @@ fn run_day(day_number: usize) -> io::Result<()> {
         3 => day3::run(),
         4 => day4::run(),
         5 => day5::run(),
-        _ => Err(io::Error::new(io::ErrorKind::Other, "Invalid day number")),
+        _ => Err(anyhow!("Invalid day number")),
     }
 }

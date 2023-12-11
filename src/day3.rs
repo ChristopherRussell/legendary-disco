@@ -1,8 +1,9 @@
 use crate::util::get_input_file_reader;
+use anyhow::Result;
 use std::collections::HashSet;
 use std::io::BufRead;
 
-pub fn run() -> std::io::Result<()> {
+pub fn run() -> Result<i32> {
     // let reader = get_input_file_reader("input3_test")?;
     let reader = get_input_file_reader("input3")?;
 
@@ -66,7 +67,7 @@ pub fn run() -> std::io::Result<()> {
         last_row_symbols = current_row_symbols;
     }
     println!("The sum of part numbers is {}", { answer });
-    Ok(())
+    Ok(answer as i32)
 }
 
 fn process_symbol(
@@ -186,6 +187,17 @@ fn process_or_store_number(
 
     // no adjacent non-period symbols yet - store incase we find one later
     current_row_numbers.insert((num_end, *nr_digits_current_num, *num_being_read));
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_day3() {
+        let result = run();
+        assert_eq!(result.unwrap(), 556057);
+    }
 }
 
 // --- Day 3: Gear Ratios ---

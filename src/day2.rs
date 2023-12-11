@@ -1,10 +1,11 @@
 use crate::util::get_input_file_reader;
+use anyhow::Result;
 use regex::Regex;
 use std::collections::HashMap;
 use std::io::BufRead;
 use std::usize;
 
-pub fn run(max_red: usize, max_green: usize, max_blue: usize) -> std::io::Result<()> {
+pub fn run(max_red: usize, max_green: usize, max_blue: usize) -> Result<i32> {
     let reader = get_input_file_reader("input2")?;
 
     let re_game = Regex::new(r"[,|:|;]").unwrap();
@@ -56,7 +57,18 @@ pub fn run(max_red: usize, max_green: usize, max_blue: usize) -> std::io::Result
         sum_of_valid_game_number
     );
     println!("Sum of powers (part 2 solution): {}", sum_of_powers);
-    Ok(())
+    Ok(sum_of_valid_game_number as i32)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_day2() {
+        let result = run(12, 13, 14);
+        assert_eq!(result.unwrap(), 2207);
+    }
 }
 
 // --- Day 2: Cube Conundrum ---

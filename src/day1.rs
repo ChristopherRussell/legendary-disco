@@ -1,7 +1,8 @@
 use crate::util::get_input_file_reader;
-use std::io::{self, BufRead}; // Note BufRead trait provides the .lines method
+use anyhow::{anyhow, Result};
+use std::io::BufRead; // Note BufRead trait provides the .lines method
 
-pub fn run() -> io::Result<()> {
+pub fn run() -> Result<i32> {
     let reader = get_input_file_reader("input1")?;
 
     let mut sum = 0;
@@ -10,10 +11,7 @@ pub fn run() -> io::Result<()> {
         let digits: Vec<char> = line.chars().filter(|c| c.is_ascii_digit()).collect();
 
         if digits.is_empty() {
-            return Err(io::Error::new(
-                io::ErrorKind::Other,
-                format!("Found a line with zero digits:\n{}", line),
-            ));
+            return Err(anyhow!("line has no digits: {}", line));
         }
 
         if let (Some(&first_digit), Some(&last_digit)) = (digits.first(), digits.last()) {
@@ -25,7 +23,18 @@ pub fn run() -> io::Result<()> {
 
     println!("Total sum of calibration values: {}", sum);
 
-    Ok(())
+    Ok(sum as i32)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_day1() {
+        let result = run();
+        assert_eq!(result.unwrap(), 54667);
+    }
 }
 
 // --- Day 1: Trebuchet?! ---

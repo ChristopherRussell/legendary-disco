@@ -1,17 +1,17 @@
 use crate::util::get_input_file_reader;
+use anyhow::Result;
 use std::collections::HashSet;
 use std::fs::File;
 use std::io::BufReader;
-use std::io::Result;
 use std::io::{BufRead, Lines};
 
-pub fn run() -> Result<()> {
+pub fn run() -> Result<i32> {
     let reader = get_input_file_reader("input4")?;
     let lines = reader.lines();
     // create iterator of lines split by whitespace
     let score = process_lines(lines)?;
     println!("Scratchcard total score: {}", score);
-    Ok(())
+    Ok(score)
 }
 
 fn process_lines(lines: Lines<BufReader<File>>) -> Result<i32> {
@@ -46,4 +46,15 @@ fn calculate_game_score(line: String) -> i32 {
         return 0;
     }
     2_i32.pow(matched_numbers - 1)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_day4() {
+        let result = run();
+        assert_eq!(result.unwrap(), 28538);
+    }
 }
