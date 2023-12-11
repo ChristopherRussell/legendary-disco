@@ -1,20 +1,15 @@
-use std::fs::File;
-use std::io::{self, BufRead};
-use std::path::PathBuf;
+use crate::util::get_input_file_reader;
+use std::io::{self, BufRead}; // Note BufRead trait provides the .lines method
 
 pub fn run() -> io::Result<()> {
-    let mut path = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
-    path.push("input/input1.txt"); // Adjust the path to the input file
-
-    let file = File::open(path)?;
-    let reader = io::BufReader::new(file);
+    let reader = get_input_file_reader("input1")?;
 
     let mut sum = 0;
     for line in reader.lines() {
         let line = line?;
-        let digits: Vec<char> = line.chars().filter(|c| c.is_digit(10)).collect();
+        let digits: Vec<char> = line.chars().filter(|c| c.is_ascii_digit()).collect();
 
-        if digits.len() == 0 {
+        if digits.is_empty() {
             return Err(io::Error::new(
                 io::ErrorKind::Other,
                 format!("Found a line with zero digits:\n{}", line),
