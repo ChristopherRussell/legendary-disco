@@ -1,6 +1,6 @@
 use anyhow::anyhow;
 use itertools::Itertools;
-use std::io::BufRead;
+use std::{collections::btree_map::Values, io::BufRead};
 
 const INPUT: &[u8] = include_bytes!("input.txt");
 
@@ -9,7 +9,7 @@ fn main() {
         eprintln!("Error: {}", e);
     }
 }
-#[derive(Eq, PartialEq, PartialOrd, Ord, Debug)]
+#[derive(Eq, PartialEq, PartialOrd, Ord, Debug, Copy, Clone)]
 struct Card(u8);
 
 impl From<u8> for Card {
@@ -47,21 +47,38 @@ struct Hand {
     cards: Vec<NOfAKind>,
 }
 
+impl Hand {
+    fn n_score(&self) -> u8 {
+        self.cards.iter().map(|c| c.n * c.n).sum()
+    }
+
+    fn cards_as_vec(&self) -> Vec<Card> {
+        let mut card_vec = Vec::new();
+        for NOfAKind { n, value } in self.cards.iter() {
+            for _ in 0..*n {
+                card_vec.push(*value);
+            }
+        }
+        card_vec
+    }
+}
+
 impl Ord for Hand {
     fn cmp(&self, other: &Self) -> std::cmp::Ordering {
-        for (cards1, cards2) in self.cards.iter().zip(other.cards.iter()) {
-            match cards1.n.cmp(&cards2.n) {
-                std::cmp::Ordering::Equal => continue,
-                other_cmp => return other_cmp,
+        match self.n_score().cmp(&other.n_score()) {
+            std::cmp::Ordering::Equal => {
+                for (self_card, other_card) in
+                    self.cards_as_vec().iter().zip(other.cards_as_vec().iter())
+                {
+                    match self_card.0.cmp(&other_card.0) {
+                        std::cmp::Ordering::Equal => continue,
+                        other => return other,
+                    }
+                }
+                std::cmp::Ordering::Equal
             }
+            other => other,
         }
-        for (cards1, cards2) in self.cards.iter().zip(other.cards.iter()) {
-            match cards1.value.cmp(&cards2.value) {
-                std::cmp::Ordering::Equal => continue,
-                other_cmp => return other_cmp,
-            }
-        }
-        std::cmp::Ordering::Equal
     }
 }
 
@@ -109,7 +126,6 @@ impl Play {
     }
 
     fn from_line(line: &str) -> anyhow::Result<Self> {
-        println!("Parsing line: {}", line);
         let mut parts = line.split_whitespace();
         let cards = parts.next().unwrap();
         let bid = parts.next().unwrap();
@@ -121,9 +137,7 @@ impl Play {
                 unexpected
             ));
         }
-        println!("Parsed cards: {}, bid: {}", cards, bid);
         let play = Self::from_strs(cards, bid);
-        println!("Parsed play: {:?}", play);
         Ok(play)
     }
 }
@@ -132,11 +146,36 @@ impl Play {
 // Comparison is then done by comparing the tuples in order.
 pub fn run() -> anyhow::Result<i64> {
     let reader = INPUT;
-    let plays = reader
-        .lines()
-        .map(|line| Play::from_line(&line.unwrap()).unwrap())
-        .sorted_unstable()
-        .collect::<Vec<_>>();
+    let plays = get_plays_from_input(reader);
+    // let mut winnings = 0;
+    // for (play, i) in plays.iter().zip(0i64..) {
+    //     let score = (i + 1) * play.bid;
+    //     let ns = play.hand.cards.iter().map(|n| n.n).collect::<Vec<_>>();
+    //     let vs = play
+    //         .hand
+    //         .cards
+    //         .iter()
+    //         .map(|n| n.value.0)
+    //         .collect::<Vec<_>>();
+    //     winnings += score;
+    //     println!(
+    //         "Rank {}: {:?}  {:?} with bid {} has score {} (total: {})",
+    //         i + 1,
+    //         ns,
+    //         vs,
+    //         play.bid,
+    //         score,
+    //         winnings
+    //     );
+    // }
+    // println!("Total winnings: {}", winnings);
+
+    let winnings = get_winnings_from_plays(plays);
+    println!("Total winnings: {}", winnings);
+    Ok(winnings)
+}
+
+fn get_winnings_from_plays(plays: Vec<Play>) -> i64 {
     let mut winnings = 0;
     for (play, i) in plays.iter().zip(0i64..) {
         let score = (i + 1) * play.bid;
@@ -160,13 +199,48 @@ pub fn run() -> anyhow::Result<i64> {
     }
     println!("Total winnings: {}", winnings);
 
-    let winnings = plays
+    plays
         .into_iter()
         .zip(1i64..)
         .map(|(play, rank)| (rank) * play.bid)
-        .sum();
-    println!("Total winnings: {}", winnings);
-    Ok(winnings)
+        .sum()
+}
+
+fn get_plays_from_input(reader: &[u8]) -> Vec<Play> {
+    reader
+        .lines()
+        .map(|line| Play::from_line(&line.unwrap()).unwrap())
+        .sorted_unstable()
+        .collect::<Vec<_>>()
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_example() {
+        let input = "32T3K 765\nT55J5 684\nKK677 28\nKTJJT 220\nQQQJA 483";
+        let plays = get_plays_from_input(input.as_bytes());
+        let winnings = get_winnings_from_plays(plays);
+        assert_eq!(winnings, 6440);
+    }
+
+    #[test]
+    fn test_parse_play() {
+        let play = Play::from_line("32T3K 765").unwrap();
+        let ns = [2, 1, 1, 1];
+        let vs = [3, 13, 10, 2];
+        let cards = ns
+            .iter()
+            .zip(vs.iter())
+            .map(|(n, v)| NOfAKind {
+                n: *n,
+                value: Card(*v),
+            })
+            .collect();
+        assert_eq!(play, Play::new(Hand { cards }, 765));
+    }
 }
 
 // --- Day 7: Camel Cards ---
