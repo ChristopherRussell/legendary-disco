@@ -7,10 +7,10 @@ edition = "2021"
 
 [dependencies]
 anyhow = "1.0.75"
-regex = "*"
 num = "0.4.0"
 itertools = "0.12.1"
 bstr = "1.9.1"
+regex = "1.10.4"
 
 [[bin]]
 name = "day1"
@@ -39,3 +39,7 @@ path = "src/day6/main.rs"
 [[bin]]
 name = "day7"
 path = "src/day7/main.rs"
+
+[[bin]]
+name = "day8"
+path = "src/day8/main.rs"
