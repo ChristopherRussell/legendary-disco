@@ -1,36 +1,37 @@
-use crate::util::get_input_file_reader;
 use anyhow::Result;
+use bstr::ByteSlice;
 use std::collections::HashSet;
-use std::fs::File;
-use std::io::BufReader;
-use std::io::{BufRead, Lines};
+use std::str;
 
-pub fn run() -> Result<i32> {
-    let reader = get_input_file_reader("input4")?;
-    let lines = reader.lines();
-    // create iterator of lines split by whitespace
-    let (score, part2_score) = process_lines(lines)?;
-    println!("Scratchcard total score: {}", score);
-    println!("Total number of cards: {}", part2_score);
-    Ok(score)
+const INPUT: &[u8] = include_bytes!("input.txt");
+
+fn main() {
+    if let Err(e) = run() {
+        eprintln!("Error: {}", e);
+    }
 }
 
-fn process_lines(lines: Lines<BufReader<File>>) -> Result<(i32, i32)> {
+fn run() -> Result<i64> {
+    let reader = INPUT;
+    let lines = reader.lines();
+    // create iterator of lines split by whitespace
     let mut score = 0;
     let mut matches = Vec::new();
     for line_result in lines {
-        let line = line_result?;
+        let line = line_result;
         let game_matches = calculate_game_nr_matches(line);
         let game_score = get_score_from_number_of_matches(game_matches as u32);
         score += game_score;
         matches.push(game_matches);
     }
     let part2_score = calculate_total_num_cards(matches);
-    Ok((score, part2_score))
-}
 
-fn calculate_game_nr_matches(line: String) -> i32 {
-    let parts = line.split_whitespace();
+    println!("Scratchcard total score: {}", score);
+    println!("Total number of cards: {}", part2_score);
+    Ok(score as i64)
+}
+fn calculate_game_nr_matches(line: &[u8]) -> i32 {
+    let parts = str::from_utf8(line).unwrap().split_whitespace();
     let mut winning_nums: HashSet<i32> = HashSet::new();
     let mut matched_numbers = 0;
     let mut seen_all_winning_numbers = false;

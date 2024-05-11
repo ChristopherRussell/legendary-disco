@@ -8,3 +8,34 @@ edition = "2021"
 [dependencies]
 anyhow = "1.0.75"
 regex = "*"
+num = "0.4.0"
+itertools = "0.12.1"
+bstr = "1.9.1"
+
+[[bin]]
+name = "day1"
+path = "src/day1/main.rs"
+
+[[bin]]
+name = "day2"
+path = "src/day2/main.rs"
+
+[[bin]]
+name = "day3"
+path = "src/day3/main.rs"
+
+[[bin]]
+name = "day4"
+path = "src/day4/main.rs"
+
+[[bin]]
+name = "day5"
+path = "src/day5/main.rs"
+
+[[bin]]
+name = "day6"
+path = "src/day6/main.rs"
+
+[[bin]]
+name = "day7"
+path = "src/day7/main.rs"

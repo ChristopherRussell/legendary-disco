@@ -1,9 +1,20 @@
-use crate::util::get_input_file_reader;
 use anyhow::{anyhow, Result};
+use std::fs::File;
+use std::io;
 use std::io::BufRead; // Note BufRead trait provides the .lines method
+use std::path::PathBuf;
 
-pub fn run() -> Result<i32> {
-    let reader = get_input_file_reader("input1")?;
+pub fn get_input_file_reader(name: &str) -> Result<io::BufReader<File>> {
+    let mut path = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+    let filename = format!("src/day1/{}.txt", name);
+    path.push(filename);
+    let file = File::open(path)?;
+    let reader = io::BufReader::new(file);
+    Ok(reader)
+}
+
+pub fn run() -> Result<i64> {
+    let reader = get_input_file_reader("input")?;
 
     let mut sum = 0;
     for line in reader.lines() {
@@ -23,7 +34,13 @@ pub fn run() -> Result<i32> {
 
     println!("Total sum of calibration values: {}", sum);
 
-    Ok(sum as i32)
+    Ok(sum as i64)
+}
+
+fn main() {
+    if let Err(e) = run() {
+        eprintln!("Error: {}", e);
+    }
 }
 
 #[cfg(test)]

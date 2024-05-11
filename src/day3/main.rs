@@ -1,11 +1,17 @@
-use crate::util::get_input_file_reader;
 use anyhow::Result;
+use bstr::ByteSlice;
 use std::collections::HashSet;
-use std::io::BufRead;
 
-pub fn run() -> Result<i32> {
-    // let reader = get_input_file_reader("input3_test")?;
-    let reader = get_input_file_reader("input3")?;
+const INPUT: &[u8] = include_bytes!("input.txt");
+
+fn main() {
+    if let Err(e) = run() {
+        eprintln!("Error: {}", e);
+    }
+}
+
+fn run() -> Result<i64> {
+    let reader = INPUT;
 
     // Stores number seen which have not yet been identified as adjacent to non-period symbol.
     // We only need to store until we have finished processing the next line.
@@ -18,7 +24,7 @@ pub fn run() -> Result<i32> {
     let mut lines = reader.lines().peekable();
 
     let first_line_length = match lines.peek() {
-        Some(Ok(line)) => line.len() as u32,
+        Some(line) => line.len() as u32,
         _ => 0, // No lines or an error on the first line
     };
 
@@ -27,7 +33,7 @@ pub fn run() -> Result<i32> {
         let mut nr_digits_current_num: u32 = 0;
         let mut current_row_numbers: HashSet<(u32, u32, u32)> = HashSet::new();
         let mut current_row_symbols: HashSet<u32> = HashSet::new();
-        for (line_position, char) in line?.chars().enumerate() {
+        for (line_position, char) in line.chars().enumerate() {
             let line_position = line_position as u32;
             if char.is_ascii_digit() {
                 num_being_read = num_being_read * 10 + char.to_digit(10).unwrap();
@@ -67,7 +73,7 @@ pub fn run() -> Result<i32> {
         last_row_symbols = current_row_symbols;
     }
     println!("The sum of part numbers is {}", { answer });
-    Ok(answer as i32)
+    Ok(answer as i64)
 }
 
 fn process_symbol(

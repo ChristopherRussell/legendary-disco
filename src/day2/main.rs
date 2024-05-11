@@ -1,12 +1,13 @@
-use crate::util::get_input_file_reader;
 use anyhow::Result;
 use regex::Regex;
 use std::collections::HashMap;
 use std::io::BufRead;
 use std::usize;
 
-pub fn run(max_red: usize, max_green: usize, max_blue: usize) -> Result<i32> {
-    let reader = get_input_file_reader("input2")?;
+const INPUT: &[u8] = include_bytes!("input.txt");
+
+pub fn run(max_red: usize, max_green: usize, max_blue: usize) -> Result<i64> {
+    let reader = INPUT;
 
     let re_game = Regex::new(r"[,|:|;]").unwrap();
     let re_game_number = Regex::new(r"^\s*Game\s+(\d+)\s*$").unwrap();
@@ -57,7 +58,12 @@ pub fn run(max_red: usize, max_green: usize, max_blue: usize) -> Result<i32> {
         sum_of_valid_game_number
     );
     println!("Sum of powers (part 2 solution): {}", sum_of_powers);
-    Ok(sum_of_valid_game_number as i32)
+    Ok(sum_of_valid_game_number as i64)
+}
+
+fn main() -> Result<()> {
+    run(12, 13, 14)?;
+    Ok(())
 }
 
 #[cfg(test)]
