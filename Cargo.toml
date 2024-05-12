@@ -11,6 +11,7 @@ num = "0.4.0"
 itertools = "0.12.1"
 bstr = "1.9.1"
 regex = "1.10.4"
+hashbrown = "0.14.5"
 
 [[bin]]
 name = "day1"
@@ -48,3 +49,6 @@ path = "src/day8/main.rs"
 name = "day9"
 path = "src/day9/main.rs"
 
+[[bin]]
+name = "day10"
+path = "src/day10/main.rs"
