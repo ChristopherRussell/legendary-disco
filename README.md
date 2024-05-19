@@ -1,3 +1,6 @@
+Credit to Chris Biscardi for the template:
+https://github.com/ChristopherBiscardi/advent-of-code/tree/main/2023/rust
+
 # Advent of Code 2023
 
 This year I've pre-set up a series of functionality for testing, benchmarking, and otherwise evaluating the performance of our Rust programs.
