@@ -96,6 +96,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "79296716171880943b8470b5f8d03aa55eb2e645a4874bdbb28adb49162e012c"
 
 [[package]]
+name = "bytecount"
+version = "0.6.8"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5ce89b21cab1437276d2650d57e971f9d548a2d9037cc231abdc0562b97498ce"
+
+[[package]]
 name = "cast"
 version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -246,7 +252,7 @@ dependencies = [
  "criterion",
  "dhat",
  "divan",
- "itertools 0.12.1",
+ "itertools 0.13.0",
  "miette",
  "nom",
  "nom-supreme",
@@ -265,7 +271,7 @@ dependencies = [
  "criterion",
  "dhat",
  "divan",
- "itertools 0.12.1",
+ "itertools 0.13.0",
  "miette",
  "nom",
  "nom-supreme",
@@ -285,7 +291,7 @@ dependencies = [
  "dhat",
  "divan",
  "glam",
- "itertools 0.12.1",
+ "itertools 0.13.0",
  "miette",
  "nom",
  "nom-supreme",
@@ -303,7 +309,7 @@ dependencies = [
  "criterion",
  "dhat",
  "divan",
- "itertools 0.12.1",
+ "itertools 0.13.0",
  "miette",
  "nom",
  "nom-supreme",
@@ -321,7 +327,7 @@ dependencies = [
  "criterion",
  "dhat",
  "divan",
- "itertools 0.12.1",
+ "itertools 0.13.0",
  "miette",
  "nom",
  "nom-supreme",
@@ -339,10 +345,30 @@ dependencies = [
  "criterion",
  "dhat",
  "divan",
- "itertools 0.12.1",
+ "itertools 0.13.0",
  "miette",
  "nom",
  "nom-supreme",
+ "rstest",
+ "test-log",
+ "thiserror",
+ "tracing",
+ "tracing-subscriber",
+]
+
+[[package]]
+name = "day-11"
+version = "0.1.0"
+dependencies = [
+ "criterion",
+ "dhat",
+ "divan",
+ "glam",
+ "itertools 0.13.0",
+ "miette",
+ "nom",
+ "nom-supreme",
+ "nom_locate",
  "rstest",
  "test-log",
  "thiserror",
@@ -570,9 +596,9 @@ dependencies = [
 
 [[package]]
 name = "itertools"
-version = "0.12.1"
+version = "0.13.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ba291022dbbd398a455acf126c1e341954079855bc60dfdda641363bd6922569"
+checksum = "413ee7dfc52ee1a4949ceeb7dbc8a33f2d6c088194d9f922fb8318faf1f01186"
 dependencies = [
  "either",
 ]
@@ -718,6 +744,17 @@ dependencies = [
  "brownstone",
  "indent_write",
  "joinery",
+ "memchr",
+ "nom",
+]
+
+[[package]]
+name = "nom_locate"
+version = "4.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1e3c83c053b0713da60c5b8de47fe8e494fe3ece5267b2f23090a07a053ba8f3"
+dependencies = [
+ "bytecount",
  "memchr",
  "nom",
 ]

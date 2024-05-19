@@ -7,7 +7,7 @@ default-members = ["day-*"]
 [workspace.dependencies]
 miette = { version = "7.2", features = ["fancy"] }
 glam = "0.27.0"
-itertools = "0.12.0"
+itertools = "0.13.0"
 nom = "7.1.3"
 nom_locate = "4.2.0"
 nom-supreme = "0.8.0"
