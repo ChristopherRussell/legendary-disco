@@ -48,7 +48,7 @@ pub fn process(
 
         line.chars()
             .zip(0u32..)
-            .group_by(|(c, _)| match c {
+            .chunk_by(|(c, _)| match c {
                 '.' => '.',
                 '0'..='9' => '#',
                 _ => '*',
