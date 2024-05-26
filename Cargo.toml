@@ -29,6 +29,7 @@ tracing-tracy = "0.11"
 tracy-client = "0.17"
 tracy-client-sys = "0.22.0"
 indicatif = { version = "0.17.7", features = ["rayon"] }
+hashbrown = "0.14.5"
 
 [profile.flamegraph]
 inherits = "release"
