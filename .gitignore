@@ -3,3 +3,4 @@ day-*.bench.txt
 .env
 .envrc
 .DS_Store
+.idea
